@@ -65,7 +65,6 @@ class CalendarWidgetFactory : RemoteViewsService.RemoteViewsFactory {
     }
 
     override fun getViewAt(position: Int): RemoteViews? {
-        Log.v(TAG, "[getViewAt]: $position")
 
         if (dateList.size <= 0) {
             return null

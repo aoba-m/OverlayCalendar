@@ -77,11 +77,6 @@ class CalendarWidget : AppWidgetProvider() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
         super.onReceive(context, intent)
-        if (intent != null) {
-            for (key in intent!!.extras?.keySet()!!) {
-                Log.v(TAG, key + ":" + intent!!.extras?.getString(key));
-            }
-        }
         if (ACTION_ITEM_CLICK.equals(intent!!.action)) {
 
             // 選択した日付のカレンダーを起動
