@@ -27,14 +27,15 @@ class CalendarUtils {
                 ContentUris.appendId(builder, now + DateUtils.WEEK_IN_MILLIS * 4)
                 // カレンダーの取得
                 val cursor = contentResolver.query(
-                        Uri.parse(CALENDAR_URL + "calendars"),
-                        arrayOf<String>(
-                            CalendarContract.Calendars._ID,
-                            CalendarContract.Calendars.NAME,
-                            CalendarContract.Calendars.VISIBLE,
-                            CalendarContract.Calendars.CALENDAR_TIME_ZONE
-                        ),
-                        null, null, null)
+                    Uri.parse(CALENDAR_URL + "calendars"),
+                    arrayOf<String>(
+                        CalendarContract.Calendars._ID,
+                        CalendarContract.Calendars.NAME,
+                        CalendarContract.Calendars.VISIBLE,
+                        CalendarContract.Calendars.CALENDAR_TIME_ZONE
+                    ),
+                    null, null, null
+                )
                 while (cursor!!.moveToNext()) {
                     val calendar = CalendarRecord()
                     calendar._id = cursor!!.getString(0)
@@ -53,10 +54,11 @@ class CalendarUtils {
                 ContentUris.appendId(builder, now - DateUtils.WEEK_IN_MILLIS)
                 ContentUris.appendId(builder, now + DateUtils.WEEK_IN_MILLIS * 4)
                 var eventCursor = contentResolver.query(
-                        builder.build(),
-                        arrayOf<String>("_id", "event_id", "title", "begin", "end", "allDay"),
-                        "calendar_id=" + calendar._id, null,
-                        "startDay ASC, startMinute ASC")
+                    builder.build(),
+                    arrayOf<String>("_id", "event_id", "title", "begin", "end", "allDay"),
+                    "calendar_id=" + calendar._id, null,
+                    "startDay ASC, startMinute ASC"
+                )
                 while (eventCursor!!.moveToNext()) {
                     val event = EventRecord()
                     event.calendar = calendar
@@ -77,10 +79,10 @@ class CalendarUtils {
             for (event in eventList) {
                 val builder = Uri.parse(CALENDAR_URL + "events").buildUpon()
                 val eventCursor = contentResolver.query(
-                        builder.build(),
-                        arrayOf<String>("title", "dtstart", "eventTimezone"),
-                        "view_events._id=" + event.event_id, null,
-                        ""
+                    builder.build(),
+                    arrayOf<String>("title", "dtstart", "eventTimezone"),
+                    "view_events._id=" + event.event_id, null,
+                    ""
                 )
                 while (eventCursor!!.moveToNext()) {
                     pushToMap(map, event)
@@ -97,7 +99,8 @@ class CalendarUtils {
     private fun pushToMap(map: MutableMap<String, ArrayList<EventRecord>>, event: EventRecord) {
         val format = SimpleDateFormat("yyyyMMdd")
         for (offset in 0..13) {
-            val offsetStartDate = format.format(Date(event.begin!!.getTime() + DateUtils.DAY_IN_MILLIS * offset))
+            val offsetStartDate =
+                format.format(Date(event.begin!!.getTime() + DateUtils.DAY_IN_MILLIS * offset))
             val endDate = format.format(event.end!!.getTime())
             if (offsetStartDate.compareTo(endDate) <= 0) {
                 var list = map[offsetStartDate]

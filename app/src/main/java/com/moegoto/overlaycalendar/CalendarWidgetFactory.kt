@@ -18,13 +18,13 @@ import java.text.SimpleDateFormat
 import kotlin.coroutines.coroutineContext
 
 
-class CalendarWidgetFactory : RemoteViewsService.RemoteViewsFactory{
+class CalendarWidgetFactory : RemoteViewsService.RemoteViewsFactory {
 
     var dateList = ArrayList<Calendar>()
-    var context :Context
+    var context: Context
     var eventMap: Map<String, List<CalendarUtils.EventRecord>>? = null
 
-    constructor(ctx: Context){
+    constructor(ctx: Context) {
         this.context = ctx
     }
 
@@ -48,8 +48,8 @@ class CalendarWidgetFactory : RemoteViewsService.RemoteViewsFactory{
     override fun onDataSetChanged() {
         dateList.clear()
 
-        var offset:Long = 0
-        for (i in  0..31){
+        var offset: Long = 0
+        for (i in 0..31) {
             var date = Date(Date().time + offset)
             var calendar = Calendar.getInstance()
             calendar.time = date
@@ -75,30 +75,49 @@ class CalendarWidgetFactory : RemoteViewsService.RemoteViewsFactory{
         var rv = RemoteViews("com.moegoto.overlaycalendar", R.layout.calendar_widget_row)
 
         // 日付をセットする
-        rv.setTextViewText(R.id.date_text, SimpleDateFormat("d").format(calendar.time) )
+        rv.setTextViewText(R.id.date_text, SimpleDateFormat("d").format(calendar.time))
         if (calendar.get(Calendar.DAY_OF_WEEK) == 1) {
-            // Sunday
             rv.setTextColor(R.id.date_text, Color.parseColor("#FF8888"))
-        }else if (calendar.get(Calendar.DAY_OF_WEEK) == 7) {
-            // Saturday
+            rv.setTextColor(R.id.weekday_text, Color.parseColor("#FF8888"))
+            rv.setTextViewText(R.id.weekday_text, "SUN")
+        } else if (calendar.get(Calendar.DAY_OF_WEEK) == 7) {
             rv.setTextColor(R.id.date_text, Color.parseColor("#8888FF"))
-        }else{
-            // Week day
+            rv.setTextColor(R.id.weekday_text, Color.parseColor("#8888FF"))
+            rv.setTextViewText(R.id.weekday_text, "SAT")
+        } else if (calendar.get(Calendar.DAY_OF_WEEK) == 2) {
             rv.setTextColor(R.id.date_text, Color.parseColor("#FFFFFF"))
+            rv.setTextColor(R.id.weekday_text, Color.parseColor("#FFFFFF"))
+            rv.setTextViewText(R.id.weekday_text, "MON")
+        } else if (calendar.get(Calendar.DAY_OF_WEEK) == 3) {
+            rv.setTextColor(R.id.date_text, Color.parseColor("#FFFFFF"))
+            rv.setTextColor(R.id.weekday_text, Color.parseColor("#FFFFFF"))
+            rv.setTextViewText(R.id.weekday_text, "TUE")
+        } else if (calendar.get(Calendar.DAY_OF_WEEK) == 4) {
+            rv.setTextColor(R.id.date_text, Color.parseColor("#FFFFFF"))
+            rv.setTextColor(R.id.weekday_text, Color.parseColor("#FFFFFF"))
+            rv.setTextViewText(R.id.weekday_text, "WED")
+        } else if (calendar.get(Calendar.DAY_OF_WEEK) == 5) {
+            rv.setTextColor(R.id.date_text, Color.parseColor("#FFFFFF"))
+            rv.setTextColor(R.id.weekday_text, Color.parseColor("#FFFFFF"))
+            rv.setTextViewText(R.id.weekday_text, "THU")
+        } else if (calendar.get(Calendar.DAY_OF_WEEK) == 6) {
+            rv.setTextColor(R.id.date_text, Color.parseColor("#FFFFFF"))
+            rv.setTextColor(R.id.weekday_text, Color.parseColor("#FFFFFF"))
+            rv.setTextViewText(R.id.weekday_text, "FRI")
         }
         // 予定をセットする
         var dateKey = SimpleDateFormat("yyyyMMdd").format(calendar.time)
-        if(eventMap != null && eventMap!!.containsKey(dateKey)) {
+        if (eventMap != null && eventMap!!.containsKey(dateKey)) {
             val events = eventMap!![dateKey]
             var sb = StringBuilder()
-            for (event in events!!){
-                if(sb.length>0){
+            for (event in events!!) {
+                if (sb.length > 0) {
                     sb.append("\n")
                 }
                 sb.append(event.title)
             }
             rv.setTextViewText(R.id.plan_text, sb.toString());
-        }else {
+        } else {
             rv.setTextViewText(R.id.plan_text, "");
         }
 

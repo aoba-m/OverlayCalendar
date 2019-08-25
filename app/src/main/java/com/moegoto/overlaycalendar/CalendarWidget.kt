@@ -21,8 +21,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-
-
 /**
  * Implementation of App Widget functionality.
  */
@@ -79,16 +77,17 @@ class CalendarWidget : AppWidgetProvider() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
         super.onReceive(context, intent)
-        if(intent!=null) {
-            for(key in intent!!.extras?.keySet()!!){
+        if (intent != null) {
+            for (key in intent!!.extras?.keySet()!!) {
                 Log.v(TAG, key + ":" + intent!!.extras?.getString(key));
             }
         }
-        if(ACTION_ITEM_CLICK.equals(intent!!.action)) {
+        if (ACTION_ITEM_CLICK.equals(intent!!.action)) {
 
             // 選択した日付のカレンダーを起動
-            var beginDate = SimpleDateFormat("yyyyMMdd").parse(intent!!.extras?.getString("targetDate"))
-            var builder=CalendarContract.CONTENT_URI.buildUpon().appendPath("time")
+            var beginDate =
+                SimpleDateFormat("yyyyMMdd").parse(intent!!.extras?.getString("targetDate"))
+            var builder = CalendarContract.CONTENT_URI.buildUpon().appendPath("time")
             ContentUris.appendId(builder, beginDate.time);
             val intent = Intent(Intent.ACTION_VIEW, builder.build());
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK;
