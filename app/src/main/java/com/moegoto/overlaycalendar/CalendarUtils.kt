@@ -11,6 +11,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 import android.content.ContentResolver
+import android.content.ContentValues.TAG
 
 class CalendarUtils {
     private val CALENDAR_URL = "content://com.android.calendar/"
@@ -88,7 +89,7 @@ class CalendarUtils {
             }
             return map
         } catch (e: Exception) {
-            Log.e("OverlaySkin", e.message, e)
+            Log.e(TAG, e.message, e)
             return null
         }
     }

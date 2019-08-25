@@ -85,17 +85,6 @@ class CalendarWidget : AppWidgetProvider() {
             }
         }
         if(ACTION_ITEM_CLICK.equals(intent!!.action)) {
-/*
-            // 予定の追加を起動
-            var beginDate = SimpleDateFormat("yyyyMMdd").parse(intent!!.extras?.getString("targetDate"))
-            var endDate = Date(beginDate.time + 1000 * 60 * 60)
-            val intent = Intent(Intent.ACTION_INSERT, CalendarContract.Events.CONTENT_URI);
-            intent.putExtra(CalendarContract.Events.TITLE, "")
-            intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, beginDate.time) //開始日時
-            intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endDate.time) //終了日時
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK;
-            context!!.startActivity(intent)
-*/
 
             // 選択した日付のカレンダーを起動
             var beginDate = SimpleDateFormat("yyyyMMdd").parse(intent!!.extras?.getString("targetDate"))
@@ -104,18 +93,6 @@ class CalendarWidget : AppWidgetProvider() {
             val intent = Intent(Intent.ACTION_VIEW, builder.build());
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK;
             context!!.startActivity(intent)
-
-            /*
-            // カレンダーを起動
-            var packageName = "com.google.android.calendar"
-            var pm = context?.getPackageManager();
-            var intent = pm?.getLaunchIntentForPackage(packageName);
-            if (intent == null) {
-                intent = Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse("market://details?id=" + packageName));
-            }
-            context!!.startActivity(intent);
-             */
 
             // カレンダーの再読み込み
             val manager = AppWidgetManager.getInstance(context)

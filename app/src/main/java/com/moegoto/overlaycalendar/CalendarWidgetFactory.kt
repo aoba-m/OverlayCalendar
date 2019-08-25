@@ -20,7 +20,7 @@ import kotlin.coroutines.coroutineContext
 
 class CalendarWidgetFactory : RemoteViewsService.RemoteViewsFactory{
 
-    var dateList = ArrayList<DateInfo>()
+    var dateList = ArrayList<Calendar>()
     var context :Context
     var eventMap: Map<String, List<CalendarUtils.EventRecord>>? = null
 
@@ -51,7 +51,9 @@ class CalendarWidgetFactory : RemoteViewsService.RemoteViewsFactory{
         var offset:Long = 0
         for (i in  0..31){
             var date = Date(Date().time + offset)
-            dateList.add(DateInfo(date))
+            var calendar = Calendar.getInstance()
+            calendar.time = date
+            dateList.add(calendar)
             offset += 1000 * 60 * 60 * 24
         }
 
@@ -69,22 +71,23 @@ class CalendarWidgetFactory : RemoteViewsService.RemoteViewsFactory{
             return null
         }
 
-        var dateInfo = dateList[position]
+        var calendar = dateList[position]
         var rv = RemoteViews("com.moegoto.overlaycalendar", R.layout.calendar_widget_row)
 
         // 日付をセットする
-        rv.setTextViewText(R.id.date_text, SimpleDateFormat("d").format(dateInfo.date) )
-        var calendar = Calendar.getInstance()
-        calendar.time = dateInfo.date
+        rv.setTextViewText(R.id.date_text, SimpleDateFormat("d").format(calendar.time) )
         if (calendar.get(Calendar.DAY_OF_WEEK) == 1) {
+            // Sunday
             rv.setTextColor(R.id.date_text, Color.parseColor("#FF8888"))
         }else if (calendar.get(Calendar.DAY_OF_WEEK) == 7) {
+            // Saturday
             rv.setTextColor(R.id.date_text, Color.parseColor("#8888FF"))
         }else{
+            // Week day
             rv.setTextColor(R.id.date_text, Color.parseColor("#FFFFFF"))
         }
         // 予定をセットする
-        var dateKey = SimpleDateFormat("yyyyMMdd").format(dateInfo.date)
+        var dateKey = SimpleDateFormat("yyyyMMdd").format(calendar.time)
         if(eventMap != null && eventMap!!.containsKey(dateKey)) {
             val events = eventMap!![dateKey]
             var sb = StringBuilder()
